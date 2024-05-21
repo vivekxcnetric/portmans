@@ -57,9 +57,9 @@ const BrandIcon = styled.img`
 const NavBrand = () => {
   const brands = [
     { url: "http://49.206.253.146:2245", icon: "/svg2.svg" }, // justJeans
-    { url: "http://49.206.253.146:2275", icon: "/icon--mbportmans.svg" }, // portmans
+    // { url: "http://49.206.253.146:2275", icon: "/icon--mbportmans.svg" }, // portmans
     { url: "http://49.206.253.146:2273", icon: "/svg9.svg" }, // dotti
-    // { url: "http://49.206.253.146:2234", icon: "/svg10.svg" }, // jayJays
+    { url: "http://49.206.253.146:2234", icon: "/svg10.svg" }, // jayJays
     { url: "http://49.206.253.146:2269", icon: "/svg11.svg" }, // jacqui-e
   ];
 
