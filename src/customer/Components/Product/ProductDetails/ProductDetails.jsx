@@ -3,7 +3,15 @@ import { useState } from "react";
 import { RadioGroup } from "@headlessui/react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ProductReviewCard from "./ProductReviewCard";
-import { Box, Button, Grid, LinearProgress, Rating, IconButton, Skeleton } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  LinearProgress,
+  Rating,
+  IconButton,
+  Skeleton,
+} from "@mui/material";
 import HomeProductCard from "../../Home/HomeProductCard";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
@@ -21,15 +29,13 @@ import styled from "styled-components";
 import { SignalWifiStatusbarNull, SingleBedSharp } from "@mui/icons-material";
 import { toast, Toaster } from "react-hot-toast";
 
-
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function ProductDetails() {
-  const [checkCart, setCheckCart] = useState(false)
-  const [qty, setQty] = useState(1)
+  const [checkCart, setCheckCart] = useState(false);
+  const [qty, setQty] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
   const [activeImage, setActiveImage] = useState(null);
   const navigate = useNavigate();
@@ -38,13 +44,11 @@ export default function ProductDetails() {
   const { productId } = useParams();
   const jwt = localStorage.getItem("jwt");
   const [productDetails, setProductDetails] = useState({});
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const { auth } = useSelector((store) => store.auth);
   const [topProducts, setTopProducts] = useState([]);
 
-
-
-  console.log(topProducts)
+  console.log(topProducts);
 
   const handleSetActiveImage = (image) => {
     setActiveImage(image);
@@ -55,15 +59,15 @@ export default function ProductDetails() {
     const partNumber = activeImage && activeImage.partNumber;
     const quantity = qty;
 
-    if(!auth){
-      toast.error("Please Login First")
+    if (!auth) {
+      toast.error("Please Login First");
       navigate("/sign-in");
     }
     if (partNumber) {
       AddItemToCartNew({ partNumber, quantity })
         .then((res) => {
           // alert("Added to Cart")
-          toast.success("Product Added To Cart")
+          toast.success("Product Added To Cart");
           dispatch(getCartItems());
         })
         .catch((error) => {
@@ -73,40 +77,33 @@ export default function ProductDetails() {
       // toast.error("out of Stock")
       console.error("Part number is missing.");
     }
-
   };
 
   useEffect(() => {
-
     if (cartItems?.cartItems?.cart?.lines.length > 0) {
       dispatch(getCartItems());
     }
   }, [cartItems?.cartItems?.cart?.lines.length]);
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     receiveProductsById(productId).then((res) => {
       setLoading(false);
       setProductDetails(res.catalogEntryView[0]);
     });
   }, [productId]);
 
-
-
   useEffect(() => {
     receiveProducts(setLoading).then((data) => {
       setTopProducts(data.hits);
-      setLoading(!loading)
+      setLoading(!loading);
     });
   }, []);
-
-
 
   useEffect(() => {
     const checkItem = CheckCardItem(productDetails?.sKUs?.[0]?.partNumber);
     setCheckCart(checkItem);
   }, [cartItems, productDetails]);
-
 
   const CheckCardItem = (ID) => {
     let Cart = cartItems?.cartItems?.orderItem;
@@ -130,34 +127,43 @@ export default function ProductDetails() {
   //   return <LinearProgress/>
   // }
   const cleanSize = (size) => {
-    return size.replace(/\D/g, ''); // Remove all non-digit characters
+    return size.replace(/\D/g, ""); // Remove all non-digit characters
   };
 
-  console.log(selectedSize)
+  console.log(selectedSize);
   if (loading) {
-    return <Skeleton variant="rectangular" width="100%" height={500} />
+    return <Skeleton variant="rectangular" width="100%" height={500} />;
   }
 
   return (
     <>
       <Toaster />
-      <div style={{ marginTop: '20px', marginLeft: '100px', marginBottom: '20px' }}>
-        <Link to='/shops'> <b>Products /</b> {productDetails?.name}</Link>
+      <div
+        style={{ marginTop: "20px", marginLeft: "100px", marginBottom: "20px" }}
+      >
+        <Link to="/search">
+          {" "}
+          <b>Products /</b> {productDetails?.name}
+        </Link>
       </div>
-      <Container >
-        {
-          productDetails && <>
-
+      <Container>
+        {productDetails && (
+          <>
             <ProductImage>
               <img
                 //  src={productDetails[0]?.fullImage} h
-                src={activeImage ? activeImage.mainImage : productDetails?.fullImage}
-                alt={productDetails?.name} />
+                src={
+                  activeImage
+                    ? activeImage.mainImage
+                    : productDetails?.fullImage
+                }
+                alt={productDetails?.name}
+              />
             </ProductImage>
             <ProductDetail>
               <Title>{productDetails?.name}</Title>
 
-              <div style={{ marginBottom: '10px' }}>
+              <div style={{ marginBottom: "10px" }}>
                 {/* <span className="text-gray-600 text-sm">
             <del>${productDetails[0]?.price[0]?.value}</del>
           </span> */}
@@ -165,48 +171,53 @@ export default function ProductDetails() {
                   ${productDetails?.price?.[1]?.value}
                 </span>
               </div>
-              <div style={{ marginTop: '12px' }}>
-                <Rating
-                  name="read-only"
-                  value={4.6}
-                  precision={0.5}
-                  readOnly
-                />
+              <div style={{ marginTop: "12px" }}>
+                <Rating name="read-only" value={4.6} precision={0.5} readOnly />
               </div>
 
-
-              <div style={{ marginTop: '10px' }}>
-                {productDetails?.variants &&
+              <div style={{ marginTop: "10px" }}>
+                {productDetails?.variants && (
                   <div>
-                    <label>Color:   {activeImage?.colour}</label>
-                  </div>}
+                    <label>Color: {activeImage?.colour}</label>
+                  </div>
+                )}
                 <ColorVariant>
-
-                  {productDetails?.variants && productDetails?.variants.map((variant, index) => (
-                    <ColorCircle key={index} onClick={() => setActiveImage(variant)} style={{ backgroundImage: `url(${variant?.smallImage})` }} />
-                  ))}
+                  {productDetails?.variants &&
+                    productDetails?.variants.map((variant, index) => (
+                      <ColorCircle
+                        key={index}
+                        onClick={() => setActiveImage(variant)}
+                        style={{
+                          backgroundImage: `url(${variant?.smallImage})`,
+                        }}
+                      />
+                    ))}
                 </ColorVariant>
                 {/* {productDetails?.variants &&
                 <div style={{ fontSize: '10px', color: `${activeImage?.partNumber && activeImage.partNumber ? "green" : "red"}` }}>
                   <span>{activeImage?.partNumber && activeImage.partNumber ? 'In Stock' : 'Out of Stock'}</span>
                 </div>} */}
-                <div style={{ marginTop: '10px' }}>
-                  {productDetails?.sizes &&
+                <div style={{ marginTop: "10px" }}>
+                  {productDetails?.sizes && (
                     <div>
                       <label htmlFor="">
                         Size: {selectedSize && selectedSize}
                       </label>
-                    </div>}
+                    </div>
+                  )}
                   <ColorVariant>
-                    {productDetails?.sizes && productDetails?.sizes.map((size, index) => {
-                      const digits = size.match(/\d+/);
-                      return (
-                        <ColorCircle key={index} onClick={() => setSelectedSize(cleanSize(size))}>
-
-                          {digits && digits[0]}
-                        </ColorCircle>
-                      );
-                    })}
+                    {productDetails?.sizes &&
+                      productDetails?.sizes.map((size, index) => {
+                        const digits = size.match(/\d+/);
+                        return (
+                          <ColorCircle
+                            key={index}
+                            onClick={() => setSelectedSize(cleanSize(size))}
+                          >
+                            {digits && digits[0]}
+                          </ColorCircle>
+                        );
+                      })}
                   </ColorVariant>
                 </div>
                 {/* <QuantityContainer>
@@ -214,7 +225,6 @@ export default function ProductDetails() {
                   <QuantityDisplay >{qty}</QuantityDisplay>
                   <QuantityButton onClick={() => setQty((pre) => pre + 1)}>+</QuantityButton>
                 </QuantityContainer> */}
-
 
                 <div className="lg:flex items-center lg:space-x-10 pt-4">
                   <div className="flex items-center space-x-2 ">
@@ -227,9 +237,7 @@ export default function ProductDetails() {
                       <RemoveCircleOutlineIcon />
                     </IconButton>
 
-                    <span className="py-1 px-7 border rounded-sm">
-                      {qty}
-                    </span>
+                    <span className="py-1 px-7 border rounded-sm">{qty}</span>
                     <IconButton
                       onClick={() => setQty((pre) => pre + 1)}
                       color="primary"
@@ -238,10 +246,7 @@ export default function ProductDetails() {
                       <AddCircleOutlineIcon />
                     </IconButton>
                   </div>
-
                 </div>
-
-
               </div>
 
               {!checkCart ? (
@@ -274,16 +279,23 @@ export default function ProductDetails() {
                 </Button>
               )}
               <div>
-                <h2 style={{ marginTop: '20px' }}> <b>Description</b> </h2>
+                <h2 style={{ marginTop: "20px" }}>
+                  {" "}
+                  <b>Description</b>{" "}
+                </h2>
               </div>
-              <Details style={{ marginTop: '10px' }}>{productDetails?.longDescription}</Details>
+              <Details style={{ marginTop: "10px" }}>
+                {productDetails?.longDescription}
+              </Details>
             </ProductDetail>
           </>
-        }
-
+        )}
       </Container>
       <Div>
-          <h1 style={{textAlign:'center',fontSize:"24px"}}> <b>Similer Products</b></h1>
+        <h1 style={{ textAlign: "center", fontSize: "24px" }}>
+          {" "}
+          <b>Similer Products</b>
+        </h1>
         <SimilarProductsContainer>
           {topProducts &&
             topProducts
@@ -293,30 +305,28 @@ export default function ProductDetails() {
                 <HomeProductCard key={index} product={product} />
               ))}
         </SimilarProductsContainer>
-        </Div>
+      </Div>
     </>
   );
 }
 
-
-const Div =styled.div`
-margin-top: 50px;
-   background-color: #f9f9f9;
+const Div = styled.div`
+  margin-top: 50px;
+  background-color: #f9f9f9;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   /* Add more styles as needed */
-`
+`;
 
 const SimilarProductsContainer = styled.div`
   display: grid;
-  
+
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   padding: 20px 150px; /* Adjusted padding for a more typical layout */
   /* Optional: Uncomment if background color is desired */
 `;
-
 
 const Container = styled.div`
   display: flex;
@@ -408,21 +418,20 @@ const ColorCircle = styled.div`
   justify-content: center;
   cursor: pointer;
   object-fit: contain;
-  border:1px solid #c2c2c2;
+  border: 1px solid #c2c2c2;
   margin-right: 10px;
   margin-top: 5px;
-  &:hover{
-    border:1.5px solid #000000;
+  &:hover {
+    border: 1.5px solid #000000;
   }
 `;
-
 
 const AddToCartButton = styled.button`
   margin-top: 20px;
   padding: 12px 24px;
   background-color: #000000;
   color: #fff;
-  border: none;   
+  border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;

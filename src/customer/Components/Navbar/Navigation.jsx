@@ -37,7 +37,6 @@ export default function Navigation() {
   const jwt = localStorage.getItem("jwt");
   const location = useLocation();
 
-
   useEffect(() => {
     if (jwt) {
       // dispatch(getUser(jwt));
@@ -367,7 +366,7 @@ export default function Navigation() {
                       className="h-6 w-6"
                       aria-hidden="true"
                       onClick={() => {
-                        navigate("/shops");
+                        navigate("/search");
                       }}
                     />
                   </p>

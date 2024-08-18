@@ -8,12 +8,15 @@ import NavBrand from "../customer/Components/Navbar/NavBrand";
 import Navbar from "../customer/Components/Navbar/Navbar";
 import Footer from "../customer/Components/footer/Footer";
 import { useSelector } from "react-redux";
-import { Toaster } from 'react-hot-toast'; // Importing Toaster for notifications
+import { Toaster } from "react-hot-toast"; // Importing Toaster for notifications
+import App from "../customer/Components/App";
 
 const ProductDetails = lazy(() =>
   import("../customer/Components/Product/ProductDetails/ProductDetails")
 );
-const Product = lazy(() => import("../customer/Components/Product/Product/Product"));
+const Product = lazy(() =>
+  import("../customer/Components/Product/Product/Product")
+);
 const Contact = lazy(() => import("../Pages/Contact"));
 const TermsCondition = lazy(() => import("../Pages/TearmsCondition"));
 const PrivacyPolicy = lazy(() => import("../Pages/PrivacyPolicy"));
@@ -38,13 +41,18 @@ const MyAccount = lazy(() => import("../Pages/MyAccount"));
 const LoadingIndicator = () => {
   return (
     <>
-      <Skeleton animation="wave" variant="rectangular" width="100%" height="100vh" />
+      <Skeleton
+        animation="wave"
+        variant="rectangular"
+        width="100%"
+        height="100vh"
+      />
       <Backdrop
         sx={{
-          color: '#fff',
+          color: "#fff",
           zIndex: (theme) => theme.zIndex.drawer + 1,
-          width: '100vw',
-          height: '100vh',
+          width: "100vw",
+          height: "100vh",
         }}
         open={true}
       >
@@ -55,7 +63,7 @@ const LoadingIndicator = () => {
 };
 
 const PrivateRoute = ({ children }) => {
-  const isAuthenticated = useSelector(state => state.auth.auth);
+  const isAuthenticated = useSelector((state) => state.auth.auth);
   const location = useLocation();
 
   return isAuthenticated ? (
@@ -72,30 +80,175 @@ const CustomerRoutes = () => {
   return (
     <div>
       <ThemeProvider theme={customerTheme}>
-        <Toaster /> {/* Adding Toaster for notifications */}
+        {/* <Toaster /> */}
         <NavBrand />
         <Navbar />
         <Routes>
-          <Route path="/" element={<Suspense fallback={<LoadingIndicator />}><Homepage /></Suspense>} />
-          <Route path="/home" element={<Suspense fallback={<LoadingIndicator />}><Homepage /></Suspense>} />
-          <Route path="/about" element={<Suspense fallback={<LoadingIndicator />}><About /></Suspense>} />
-          <Route path="/privacy-policy" element={<Suspense fallback={<LoadingIndicator />}><PrivacyPolicy /></Suspense>} />
-          <Route path="/terms-condition" element={<Suspense fallback={<LoadingIndicator />}><TermsCondition /></Suspense>} />
-          <Route path="/sign-up" element={<Suspense fallback={<LoadingIndicator />}><SignUp /></Suspense>} />
-          <Route path="/sign-in" element={<Suspense fallback={<LoadingIndicator />}><SignIn /></Suspense>} />
+          <Route
+            path="/"
+            element={
+              <Suspense fallback={<LoadingIndicator />}>
+                <Homepage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <Suspense fallback={<LoadingIndicator />}>
+                <Homepage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <Suspense fallback={<LoadingIndicator />}>
+                <About />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/privacy-policy"
+            element={
+              <Suspense fallback={<LoadingIndicator />}>
+                <PrivacyPolicy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/terms-condition"
+            element={
+              <Suspense fallback={<LoadingIndicator />}>
+                <TermsCondition />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/sign-up"
+            element={
+              <Suspense fallback={<LoadingIndicator />}>
+                <SignUp />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/sign-in"
+            element={
+              <Suspense fallback={<LoadingIndicator />}>
+                <SignIn />
+              </Suspense>
+            }
+          />
           {/* Private routes */}
-          <Route path="/my-account" element={<PrivateRoute><Suspense fallback={<LoadingIndicator />}><MyAccount /></Suspense></PrivateRoute>} />
-          <Route path="/contact" element={<Suspense fallback={<LoadingIndicator />}><Contact /></Suspense>} />
-          <Route path="/:lavelOne/:lavelTwo/:lavelThree" element={<PrivateRoute><Suspense fallback={<LoadingIndicator />}><Product /></Suspense></PrivateRoute>} />
-          <Route path="/product/:productId" element={<Suspense fallback={<LoadingIndicator />}><ProductDetails /></Suspense>} />
-          <Route path="/cart" element={<PrivateRoute><Suspense fallback={<LoadingIndicator />}><Cart /></Suspense></PrivateRoute>} />
-          <Route path="/account/order" element={<Suspense fallback={<LoadingIndicator />}><Order /></Suspense>} />
-          <Route path="/account/order/:orderId" element={<PrivateRoute><Suspense fallback={<LoadingIndicator />}><OrderDetails /></Suspense></PrivateRoute>} />
-          <Route path="/checkout" element={<PrivateRoute><Suspense fallback={<LoadingIndicator />}><Checkout /></Suspense></PrivateRoute>} />
-          <Route path="/payment/:orderId" element={<Suspense fallback={<LoadingIndicator />}><PaymentSuccess /></Suspense>} />
-          <Route path="/shops" element={<Suspense fallback={<LoadingIndicator />}><Product /></Suspense>} />
+          <Route
+            path="/my-account"
+            element={
+              <PrivateRoute>
+                <Suspense fallback={<LoadingIndicator />}>
+                  <MyAccount />
+                </Suspense>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <Suspense fallback={<LoadingIndicator />}>
+                <Contact />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/:lavelOne/:lavelTwo/:lavelThree"
+            element={
+              <PrivateRoute>
+                <Suspense fallback={<LoadingIndicator />}>
+                  <Product />
+                </Suspense>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/product/:productId"
+            element={
+              <Suspense fallback={<LoadingIndicator />}>
+                <ProductDetails />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <PrivateRoute>
+                <Suspense fallback={<LoadingIndicator />}>
+                  <Cart />
+                </Suspense>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/account/order"
+            element={
+              <Suspense fallback={<LoadingIndicator />}>
+                <Order />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/account/order/:orderId"
+            element={
+              <PrivateRoute>
+                <Suspense fallback={<LoadingIndicator />}>
+                  <OrderDetails />
+                </Suspense>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <PrivateRoute>
+                <Suspense fallback={<LoadingIndicator />}>
+                  <Checkout />
+                </Suspense>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/payment/:orderId"
+            element={
+              <Suspense fallback={<LoadingIndicator />}>
+                <PaymentSuccess />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/shops"
+            element={
+              <Suspense fallback={<LoadingIndicator />}>
+                <Product />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/search"
+            element={
+              // <Suspense fallback={<LoadingIndicator />}>
+              <App />
+              /* </Suspense> */
+            }
+          />
+
           {/* Not found route */}
-          <Route path="*" element={<Suspense fallback={<LoadingIndicator />}><NotFound /></Suspense>} />
+          <Route
+            path="*"
+            element={
+              <Suspense fallback={<LoadingIndicator />}>
+                <NotFound />
+              </Suspense>
+            }
+          />
         </Routes>
         <Footer />
       </ThemeProvider>
